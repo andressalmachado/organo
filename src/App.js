@@ -1,9 +1,6 @@
 import { useState } from "react";
+import { v4 as uuidv4 } from "uuid";
 import Banner from "./componentes/Banner/Banner";
-// O import abaixo está apontando apenas para a pasta CampoTexto,
-//pois dentro dela, ele encontrará o arquivo index.js.
-// Essa é uma forma para não repetir os nomes, como está no primeiro import.
-
 import Formulario from "./componentes/Formulario";
 import Rodape from "./componentes/Rodape";
 import Time from "./componentes/Time";
@@ -11,39 +8,39 @@ import Time from "./componentes/Time";
 function App() {
   const [times, setTimes] = useState([
     {
+      id: uuidv4(),
       nome: "Programação",
       corPrimaria: "#57c278",
-      corSecundaria: "#d9f7e9",
     },
     {
+      id: uuidv4(),
       nome: "Front-End",
       corPrimaria: "#82cffa",
-      corSecundaria: "#e8f8ff",
     },
     {
+      id: uuidv4(),
       nome: "Data Science",
       corPrimaria: "#a6d157",
-      corSecundaria: "#F0F8E2",
     },
     {
+      id: uuidv4(),
       nome: "Devops",
       corPrimaria: "#e06b69",
-      corSecundaria: "#fde7e8",
     },
     {
+      id: uuidv4(),
       nome: "UX e Design",
       corPrimaria: "#db6ebf",
-      corSecundaria: "#FAE9F5",
     },
     {
+      id: uuidv4(),
       nome: "Mobile",
       corPrimaria: "#ffba05",
-      corSecundaria: "#fff5d9",
     },
     {
+      id: uuidv4(),
       nome: "Inovação e Gestão",
       corPrimaria: "#ff8a29",
-      corSecundaria: "#ffeedf",
     },
   ]);
 
@@ -52,14 +49,16 @@ function App() {
     //debugger;
     setColaboradores([...colaboradores, colaborador]);
   };
-  function deletarColaborador() {
-    console.log("deletando colaborador");
+  function deletarColaborador(id) {
+    setColaboradores(
+      colaboradores.filter((colaborador) => colaborador.id !== id)
+    );
   }
 
-  function mudarCorDoTime(cor, nome) {
+  function mudarCorDoTime(cor, id) {
     setTimes(
       times.map((time) => {
-        if (time.nome === nome) {
+        if (time.id === id) {
           time.corPrimaria = cor;
         }
         return time;
@@ -67,10 +66,15 @@ function App() {
     );
   }
 
+  function cadastrarTime(novoTime) {
+    setTimes([...times, { ...novoTime, id: uuidv4() }]);
+  }
+
   return (
     <div className="App">
       <Banner />
       <Formulario
+        cadastrarTime={cadastrarTime}
         times={times.map((time) => time.nome)}
         aoColaboradorCadastrado={(colaborador) =>
           aoNovoColaboradorAdicionado(colaborador)
@@ -79,10 +83,10 @@ function App() {
       {times.map((time) => (
         <Time
           mudarCor={mudarCorDoTime}
+          id={time.id}
           key={time.nome}
           nome={time.nome}
           corPrimaria={time.corPrimaria}
-          corSecundaria={time.corSecundaria}
           colaboradores={colaboradores.filter(
             (colaborador) => colaborador.time === time.nome
           )}
