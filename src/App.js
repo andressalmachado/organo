@@ -67,7 +67,17 @@ function App() {
   }
 
   function cadastrarTime(novoTime) {
-    setTimes([...times, { ...novoTime, id: uuidv4() }]);
+    debugger;
+    setTimes([...times, { ...novoTime }]);
+  }
+
+  function resolverFavorito(id) {
+    setColaboradores(
+      colaboradores.map((colaborador) => {
+        if (colaborador.id === id) console.log((colaborador.favorito = true));
+        return colaborador;
+      })
+    );
   }
 
   return (
@@ -91,6 +101,7 @@ function App() {
             (colaborador) => colaborador.time === time.nome
           )}
           aoDeletar={deletarColaborador}
+          aoFavoritar={resolverFavorito}
         />
       ))}
       <Rodape />
